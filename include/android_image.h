@@ -33,7 +33,8 @@ struct andr_img_hdr {
 
 	u32 tags_addr;		/* physical addr for kernel tags */
 	u32 page_size;		/* flash page size we assume */
-	u32 unused;		/* reserved for future expansion: MUST be 0 */
+	/* https://github.com/osm0sis/mkbootimg/blob/2017.12.13/bootimg.h#L46 */
+	u32 dt_size;		/* reserved for future expansion: MUST be 0 */
 
 	/* operating system version and security patch level; for
 	 * version "A.B.C" and patch level "Y-M-D":

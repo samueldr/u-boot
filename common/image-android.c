@@ -117,6 +117,7 @@ ulong android_image_get_end(const struct andr_img_hdr *hdr)
 	end += ALIGN(hdr->kernel_size, hdr->page_size);
 	end += ALIGN(hdr->ramdisk_size, hdr->page_size);
 	end += ALIGN(hdr->second_size, hdr->page_size);
+	end += ALIGN(hdr->dt_size, hdr->page_size); /* qcom */
 
 	return end;
 }
@@ -164,6 +165,26 @@ int android_image_get_second(const struct andr_img_hdr *hdr,
 	return 0;
 }
 
+int android_image_get_dt(const struct andr_img_hdr *hdr,
+			      ulong *dt_data, ulong *dt_len)
+{
+	if (!hdr->dt_size) {
+		*dt_data = *dt_len = 0;
+		return -1;
+	}
+
+	*dt_data = (unsigned long)hdr;
+	*dt_data += hdr->page_size;
+	*dt_data += ALIGN(hdr->kernel_size, hdr->page_size);
+	*dt_data += ALIGN(hdr->ramdisk_size, hdr->page_size);
+	*dt_data += ALIGN(hdr->second_size, hdr->page_size);
+
+	printf("dt address is 0x%lx\n",*dt_data);
+
+	*dt_len = hdr->dt_size;
+	return 0;
+}
+
 #if !defined(CONFIG_SPL_BUILD)
 /**
  * android_print_contents - prints out the contents of the Android format image
@@ -191,6 +212,7 @@ void android_print_contents(const struct andr_img_hdr *hdr)
 	printf("%ssecond address:   %x\n", p, hdr->second_addr);
 	printf("%stags address:     %x\n", p, hdr->tags_addr);
 	printf("%spage size:        %x\n", p, hdr->page_size);
+	printf("%sdt_size:          %x\n", p, hdr->dt_size); /* qcom */
 	/* ver = A << 14 | B << 7 | C         (7 bits for each of A, B, C)
 	 * lvl = ((Y - 2000) & 127) << 4 | M  (7 bits for Y, 4 bits for M) */
 	printf("%sos_version:       %x (ver: %u.%u.%u, level: %u.%u)\n",
