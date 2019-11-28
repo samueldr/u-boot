@@ -21,7 +21,7 @@
 #include "menu.h"
 #include "cli.h"
 
-#define MAX_TFTP_PATH_LEN 127
+#define MAX_TFTP_PATH_LEN 512
 
 const char *pxe_default_paths[] = {
 #ifdef CONFIG_SYS_SOC
