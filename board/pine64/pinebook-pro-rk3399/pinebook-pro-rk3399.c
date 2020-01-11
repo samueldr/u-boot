@@ -6,6 +6,7 @@
 
 #include <common.h>
 #include <dm.h>
+#include <spl_gpio.h>
 #include <syscon.h>
 #include <linux/delay.h>
 #include <asm/gpio.h>
@@ -18,6 +19,8 @@
 #include <power/regulator.h>
 #define GRF_IO_VSEL_BT565_SHIFT 0
 #define PMUGRF_CON0_VSEL_SHIFT 8
+
+#define GPIO0_BASE	0xff720000
 
 #ifndef CONFIG_SPL_BUILD
 int board_early_init_f(void)
@@ -53,6 +56,15 @@ static void setup_iodomain(void)
 
 	/* Set GPIO1 1.8v/3.0v source select to PMU1830_VOL */
 	rk_setreg(&pmugrf->soc_con0, 1 << PMUGRF_CON0_VSEL_SHIFT);
+}
+
+void led_setup(void)
+{
+	struct rockchip_gpio_regs * const gpio0 = (void *)GPIO0_BASE;
+
+	// Light up the red LED
+	// <&gpio0 RK_PA2 GPIO_ACTIVE_HIGH>;
+	spl_gpio_output(gpio0, GPIO(BANK_A, 2), 1);
 }
 
 int misc_init_r(void)
