@@ -41,3 +41,51 @@
 &vdd_log {
 	regulator-init-microvolt = <950000>;
 };
+
+&vdd_center {
+	u-boot,dm-pre-reloc;
+};
+
+&vdd_cpu_l {
+	u-boot,dm-pre-reloc;
+};
+
+&vcc_ddr {
+	u-boot,dm-pre-reloc;
+};
+
+&vcc_1v8 {
+	u-boot,dm-pre-reloc;
+};
+
+&vcc1v8_pmupll {
+	u-boot,dm-pre-reloc;
+};
+
+&vcc_sdio {
+	u-boot,dm-pre-reloc;
+};
+
+&vcca3v0_codec {
+	u-boot,dm-pre-reloc;
+};
+
+&vcc_1v5 {
+	u-boot,dm-pre-reloc;
+};
+
+&vcca1v8_codec {
+	u-boot,dm-pre-reloc;
+};
+
+&vcc_3v0 {
+	u-boot,dm-pre-reloc;
+};
+
+&vcc3v3_s3 {
+	u-boot,dm-pre-reloc;
+};
+
+&vcc3v3_s0 {
+	u-boot,dm-pre-reloc;
+};
