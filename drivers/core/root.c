@@ -256,7 +256,7 @@ static int dm_scan_fdt_node(struct udevice *parent, const void *blob,
 				     pre_reloc_only);
 		if (err && !ret) {
 			ret = err;
-			debug("%s: ret=%d\n", node_name, ret);
+			debug("lists_bind_fdt() for %s: ret=%d in dm_scan_fdt_node\n", node_name, ret);
 		}
 	}
 

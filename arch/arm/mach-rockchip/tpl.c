@@ -72,7 +72,7 @@ void board_init_f(ulong dummy)
 #endif
 	ret = spl_early_init();
 	if (ret) {
-		debug("spl_early_init() failed: %d\n", ret);
+		debug("spl_early_init() failed in rockchip TPL: %d\n", ret);
 		hang();
 	}
 

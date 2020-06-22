@@ -126,7 +126,7 @@ void board_init_f(ulong dummy)
 
 	ret = spl_early_init();
 	if (ret) {
-		printf("spl_early_init() failed: %d\n", ret);
+		printf("spl_early_init() failed in rockchip SPL: %d\n", ret);
 		hang();
 	}
 	arch_cpu_init();
