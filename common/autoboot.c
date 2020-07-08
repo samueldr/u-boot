@@ -44,8 +44,12 @@ static int menukey;
 #define AUTOBOOT_STOP_STR_SHA256 ""
 #endif
 
-#ifdef CONFIG_USE_AUTOBOOT_MENUKEY
-#define AUTOBOOT_MENUKEY CONFIG_USE_AUTOBOOT_MENUKEY
+#ifdef CONFIG_AUTOBOOT_USE_MENUKEY
+#ifdef CONFIG_AUTOBOOT_MENUKEY
+#define AUTOBOOT_MENUKEY CONFIG_AUTOBOOT_MENUKEY
+#else
+#define AUTOBOOT_MENUKEY 0
+#endif
 #else
 #define AUTOBOOT_MENUKEY 0
 #endif
@@ -258,11 +262,22 @@ static int abortboot_single_key(int bootdelay)
 	 * Check if key already pressed
 	 */
 	if (tstc()) {	/* we got a key press	*/
-		(void) getc();  /* consume input        */
-		puts(ANSI_CLEAR_LINE);
-		printf(ANSI_CURSOR_COLUMN, 1);
-		printf(CONFIG_AUTOBOOT_PROMPT, 0);
-		abort = 1;	/* don't auto boot	*/
+		if (IS_ENABLED(CONFIG_AUTOBOOT_USE_MENUKEY)){
+			menukey = getc();
+			puts(ANSI_CLEAR_LINE);
+			printf(ANSI_CURSOR_COLUMN, 1);
+			printf(CONFIG_AUTOBOOT_PROMPT, 0);
+			if (menukey == AUTOBOOT_MENUKEY) {
+				abort = 1;
+				bootdelay = 0;
+			}
+		} else {
+			(void) getc();  /* consume input        */
+			puts(ANSI_CLEAR_LINE);
+			printf(ANSI_CURSOR_COLUMN, 1);
+			printf(CONFIG_AUTOBOOT_PROMPT, 0);
+			abort = 1;	/* don't auto boot	*/
+		}
 	}
 
 	while ((bootdelay > 0) && (!abort)) {
@@ -271,13 +286,18 @@ static int abortboot_single_key(int bootdelay)
 		ts = get_timer(0);
 		do {
 			if (tstc()) {	/* we got a key press	*/
-				int key;
-
-				abort  = 1;	/* don't auto boot	*/
-				bootdelay = 0;	/* no more delay	*/
-				key = getc(); /* consume input	*/	
-				if (IS_ENABLED(CONFIG_USE_AUTOBOOT_MENUKEY))
-					menukey = key;
+				
+				if (IS_ENABLED(CONFIG_AUTOBOOT_USE_MENUKEY)){
+					menukey = getc();
+					if (menukey == AUTOBOOT_MENUKEY){
+						abort = 1;
+						bootdelay = 0;
+					}
+				} else {
+					abort  = 1;	/* don't auto boot	*/
+					bootdelay = 0;	/* no more delay	*/
+					menukey = getc(); /* consume input	*/	
+				}
 				break;
 			}
 			udelay(10000);
@@ -383,8 +403,7 @@ void autoboot_command(const char *s)
 			disable_ctrlc(prev);	/* restore Ctrl-C checking */
 	}
 
-	if (IS_ENABLED(CONFIG_USE_AUTOBOOT_MENUKEY) &&
-	    menukey == AUTOBOOT_MENUKEY) {
+	if (IS_ENABLED(CONFIG_AUTOBOOT_USE_MENUKEY)) {
 		s = env_get("menucmd");
 		if (s)
 			run_command_list(s, -1, 0);
