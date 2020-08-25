@@ -6,7 +6,22 @@
 #ifndef __ROC_PC_RK3399_H
 #define __ROC_PC_RK3399_H
 
+// This sets up additional environment variables for our opinionated setup.
+// (See rk3399_common.h, it should be apended to ROCKCHIP_DEVICE_SETTINGS here
+//  but it makes patches harder to apply...)
+#define OPINIONATED_ENV \
+		"bootmenu_delay=-1\0" \
+		"bootmenu_0=Default U-Boot boot=run distro_bootcmd; echo \"Boot failed.\"; sleep 5; $menucmd -1\0" \
+		"bootmenu_1=Boot from eMMC=run bootcmd_mmc0; echo \"eMMC Boot failed.\"; sleep 5; $menucmd -1\0" \
+		"bootmenu_2=Boot from SD=run bootcmd_mmc1; echo \"SD Boot failed.\"; sleep 5; $menucmd -1\0" \
+		"bootmenu_3=Boot from USB=run bootcmd_usb0; echo \"USB Boot failed.\"; sleep 5; $menucmd -1\0" \
+		"bootmenu_4=Boot PXE=run bootcmd_pxe; echo \"PXE Boot failed.\"; sleep 5; $menucmd -1\0" \
+		"bootmenu_5=Boot DHCP=run bootcmd_dhcp; echo \"DHCP Boot failed.\"; sleep 5; $menucmd -1\0" \
+		"bootmenu_6=Reboot=reset\0" \
+		"menucmd=bootmenu\0"
+
 #define ROCKCHIP_DEVICE_SETTINGS \
+		OPINIONATED_ENV \
 		"stdin=serial,usbkbd\0" \
 		"stdout=serial,vidconsole\0" \
 		"stderr=serial,vidconsole\0"
