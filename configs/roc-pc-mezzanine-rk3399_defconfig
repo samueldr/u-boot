@@ -77,3 +77,34 @@ CONFIG_VIDEO_ROCKCHIP=y
 CONFIG_DISPLAY_ROCKCHIP_HDMI=y
 CONFIG_SPL_TINY_MEMSET=y
 CONFIG_ERRNO_STR=y
+
+CONFIG_LED=y
+CONFIG_LED_GPIO=y
+
+# Boot menu required for the menu (duh)
+CONFIG_CMD_BOOTMENU=y
+
+# Required for the splash (see include/configs/roc-pc-rk3399.h)
+CONFIG_CMD_BMP=y
+
+# Truetype console configuration
+CONFIG_CONSOLE_TRUETYPE=y
+CONFIG_CONSOLE_TRUETYPE_NIMBUS=y
+CONFIG_CONSOLE_TRUETYPE_SIZE=26
+
+# Boot menu and default boot configuration
+
+# Gives *some* time for the user to act.
+# Though an already-knowledgeable user will know they can use the key before
+# the message is shown.
+# Conversely, CTRL+C can cancel the default boot, showing the menu as expected
+# In reality, this gives us MUCH MORE slop in the time window than 1 second.
+CONFIG_BOOTDELAY=1
+# This would be escape, but the USB drivers don't really play well and
+# escape doesn't work from the keyboard.
+CONFIG_AUTOBOOT_MENUKEY=27
+# So we'll fake that using CTRL+C is what we want...
+# It's only a side-effect.
+CONFIG_AUTOBOOT_PROMPT="Press CTRL+C for the boot menu."
+# And this ends up causing the menu to be used on CTRL+C (or escape)
+CONFIG_AUTOBOOT_USE_MENUKEY=y
