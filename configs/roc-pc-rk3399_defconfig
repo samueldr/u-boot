@@ -78,6 +78,9 @@ CONFIG_ERRNO_STR=y
 # Boot menu required for the menu (duh)
 CONFIG_CMD_BOOTMENU=y
 
+# Required for the splash (see include/configs/roc-pc-rk3399.h)
+CONFIG_CMD_BMP=y
+
 # Truetype console configuration
 CONFIG_CONSOLE_TRUETYPE=y
 CONFIG_CONSOLE_TRUETYPE_NIMBUS=y
