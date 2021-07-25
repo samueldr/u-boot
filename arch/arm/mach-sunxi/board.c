@@ -305,6 +305,7 @@ uint32_t sunxi_get_boot_device(void)
 }
 
 #ifdef CONFIG_SPL_BUILD
+#ifndef CONFIG_MACH_SUNIV
 static u32 sunxi_get_spl_size(void)
 {
 	if (!is_boot0_magic(SPL_ADDR + 4)) /* eGON.BT0 */
@@ -339,8 +340,6 @@ unsigned long spl_mmc_get_uboot_raw_sector(struct mmc *mmc,
 	return sector;
 }
 
-
-#ifndef CONFIG_MACH_SUNIV
 u32 spl_boot_device(void)
 {
 	return sunxi_get_boot_device();
