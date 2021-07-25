@@ -126,6 +126,11 @@
 				function = "uart0";
 			};
 
+			uart1_pa_pins: uart-pins-pa {
+				pins = "PA2", "PA3";
+				function = "uart1";
+			};
+
 			mmc0_pins: mmc0-pins {
 				pins = "PF0", "PF1", "PF2", "PF3", "PF4", "PF5";
 				function = "mmc0";
