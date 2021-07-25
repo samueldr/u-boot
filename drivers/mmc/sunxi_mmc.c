@@ -324,7 +324,7 @@ static int mmc_trans_data_by_cpu(struct sunxi_mmc_priv *priv, struct mmc *mmc,
 	start = get_timer(0);
 
 	for (i = 0; i < word_cnt;) {
-		unsigned int in_fifo;
+		__maybe_unused unsigned int in_fifo;
 
 		while ((status = readl(&priv->reg->status)) & status_bit) {
 			if (get_timer(start) > timeout_msecs)
@@ -343,6 +343,9 @@ static int mmc_trans_data_by_cpu(struct sunxi_mmc_priv *priv, struct mmc *mmc,
 			continue;
 		}
 
+#ifdef CONFIG_MACH_SUNIV
+		buff[i++] = readl(&priv->reg->fifo);
+#else
 		/*
 		 * The status register holds the current FIFO level, so we
 		 * can be sure to collect as many words from the FIFO
@@ -355,6 +358,7 @@ static int mmc_trans_data_by_cpu(struct sunxi_mmc_priv *priv, struct mmc *mmc,
 		     in_fifo--)
 			buff[i++] = readl_relaxed(&priv->reg->fifo);
 		dmb();
+#endif
 	}
 
 	return 0;
