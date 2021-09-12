@@ -73,6 +73,7 @@ obj-$(CONFIG_VIDEO_TEGRA20) += tegra.o
 obj-$(CONFIG_VIDEO_VCXK) += bus_vcxk.o
 obj-$(CONFIG_VIDEO_VESA) += vesa.o
 obj-$(CONFIG_VIDEO_SEPS525) += seps525.o
+obj-$(CONFIG_VIDEO_MIYOO_ST7789S) += miyoo-st7789s.o
 
 obj-y += bridge/
 obj-y += sunxi/
