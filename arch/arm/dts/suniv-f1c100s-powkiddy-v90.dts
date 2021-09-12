@@ -1,0 +1,104 @@
+// SPDX-License-Identifier: (GPL-2.0+ OR X11)
+/*
+ * Copyright 2018 Icenowy Zheng <icenowy@aosc.io>
+ * Copyright 2021 Samuel Dionne-Riel <samuel@dionne-riel.com>
+ */
+
+/dts-v1/;
+#include "suniv-f1c100s.dtsi"
+
+#include <dt-bindings/gpio/gpio.h>
+#include <dt-bindings/input/input.h>
+
+#define BUTTON(name, key, bank, pin) btn_##name { \
+		label = #name; \
+		linux,code = <key>; \
+		gpios = <&pio bank pin GPIO_ACTIVE_LOW>; \
+	}
+
+/ {
+	model = "Powkiddy v90";
+	compatible = "powkiddy,powkiddy-v90", "allwinner,suniv-f1c100s",
+		     "allwinner,suniv";
+
+	aliases {
+		serial1 = &uart1;
+	};
+
+	chosen {
+		stdout-path = "serial1:115200n8";
+	};
+
+	lcd {
+		u-boot,dm-pre-reloc;
+		compatible = "sitronix,miyoo-st7789s";
+		status = "okay";
+		backlight-gpio = <&pio 4 6 GPIO_ACTIVE_HIGH>; /* PE6 */
+		power-gpio = <&pio 4 11 GPIO_ACTIVE_HIGH>; /* PE11 */
+		lcd-data-gpios =
+			// LSB
+			<&pio 3  1 GPIO_ACTIVE_HIGH>, /* PD1 : D00 */
+			<&pio 3  2 GPIO_ACTIVE_HIGH>, /* PD2 : D01 */
+			<&pio 3  3 GPIO_ACTIVE_HIGH>, /* PD3 : D02 */
+			<&pio 3  4 GPIO_ACTIVE_HIGH>, /* PD4 : D03 */
+			<&pio 3  5 GPIO_ACTIVE_HIGH>, /* PD5 : D04 */
+			<&pio 3  6 GPIO_ACTIVE_HIGH>, /* PD6 : D05 */
+			<&pio 3  7 GPIO_ACTIVE_HIGH>, /* PD7 : D06 */
+			<&pio 3  8 GPIO_ACTIVE_HIGH>, /* PD8 : D07 */
+
+			// MSB
+			<&pio 3 10 GPIO_ACTIVE_HIGH>, /* PD10 : D08 */
+			<&pio 3 11 GPIO_ACTIVE_HIGH>, /* PD11 : D09 */
+			<&pio 3 12 GPIO_ACTIVE_HIGH>, /* PD12 : D10 */
+			<&pio 3 13 GPIO_ACTIVE_HIGH>, /* PD13 : D11 */
+			<&pio 3 14 GPIO_ACTIVE_HIGH>, /* PD14 : D12 */
+			<&pio 3 15 GPIO_ACTIVE_HIGH>, /* PD15 : D13 */
+			<&pio 3 16 GPIO_ACTIVE_HIGH>, /* PD16 : D14 */
+			<&pio 3 17 GPIO_ACTIVE_HIGH>  /* PD17 : D15 */
+		;
+		lcd-wrx = <&pio 3 18 GPIO_ACTIVE_HIGH>; /* PD18 : WRX */
+		lcd-dcx = <&pio 3 19 GPIO_ACTIVE_HIGH>; /* PD19 : D/CX */
+		lcd-csx = <&pio 3 20 GPIO_ACTIVE_LOW>;  /* PD20 : CSX */
+	};
+
+	gpio_keys {
+		status = "okay";
+
+		compatible = "gpio-keys-polled";
+		poll-interval = <30>;
+		autorepeat;
+
+		BUTTON(start,   KEY_ENTER,     4,  0); /* PE0 */
+		BUTTON(select,  KEY_ESC,       3,  0); /* PD0 */
+		BUTTON(suspend, KEY_RIGHTCTRL, 4,  1); /* PE1 */
+
+		BUTTON(up,      KEY_UP,        4,  2); /* PE2 */
+		BUTTON(down,    KEY_DOWN,      4,  3); /* PE3 */
+		BUTTON(left,    KEY_LEFT,      4,  4); /* PE4 */
+		BUTTON(right,   KEY_RIGHT,     4,  5); /* PE5 */
+
+		BUTTON(a,       KEY_LEFTCTRL,  4,  9); /* PE9 */
+		BUTTON(b,       KEY_LEFTALT,   4,  7); /* PE7 */
+		BUTTON(x,       KEY_SPACE,     3,  9); /* PD9 */
+		BUTTON(y,       KEY_LEFTSHIFT, 4,  8); /* PE8 */
+
+		BUTTON(l1,      KEY_TAB,       2,  1); /* PC1 */
+		BUTTON(r1,      KEY_BACKSPACE, 2,  2); /* PC2 */
+		BUTTON(l2,      KEY_PAGEUP,    2,  3); /* PC3 */
+		BUTTON(r2,      KEY_PAGEDOWN,  0,  1); /* PA1 */
+	};
+};
+
+&otg_sram {
+	status = "okay";
+};
+
+&uart1 {
+	pinctrl-names = "default";
+	pinctrl-0 = <&uart1_pa_pins>;
+	status = "okay";
+};
+
+&mmc0 {
+	status = "okay";
+};
