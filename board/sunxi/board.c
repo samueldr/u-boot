@@ -541,6 +541,7 @@ int board_mmc_init(struct bd_info *bis)
 	return 0;
 }
 
+#ifdef CONFIG_SYS_MMC_ENV_DEV
 #if CONFIG_MMC_SUNXI_SLOT_EXTRA != -1
 int mmc_get_env_dev(void)
 {
@@ -579,6 +580,7 @@ void sunxi_board_init(void)
 #ifdef CONFIG_LED_STATUS
 	if (IS_ENABLED(CONFIG_SPL_DRIVERS_MISC))
 		status_led_init();
+#endif
 #endif
 
 #ifdef CONFIG_SY8106A_POWER
