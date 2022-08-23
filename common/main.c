@@ -48,6 +48,9 @@ void main_loop(void)
 
 	cli_init();
 
+	if (IS_ENABLED(CONFIG_USB_KEYBOARD))
+		run_command("usb start", 0);
+
 	if (IS_ENABLED(CONFIG_USE_PREBOOT))
 		run_preboot_environment_command();
 
