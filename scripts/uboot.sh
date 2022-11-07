@@ -44,7 +44,7 @@ else
 	MAX_KB=`echo ${SIZE} | awk '{print strtonum($2)}'`
 	MAX_KB=$(((MAX_KB-HEAD_KB)*1024))
 fi
-
+#MAX_KB=1230416
 if [ ${BIN_KB} -gt ${MAX_KB} ]; then
 	echo "ERROR: pack uboot failed! u-boot.bin actual: ${BIN_KB} bytes, max limit: ${MAX_KB} bytes"
 	exit 1
