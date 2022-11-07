@@ -1584,7 +1584,7 @@ static int rockchip_display_fixup_dts(void *blob)
 	return 0;
 }
 #endif
-
+#define __HDMI__
 static int rockchip_display_probe(struct udevice *dev)
 {
 	struct video_priv *uc_priv = dev_get_uclass_priv(dev);
@@ -1625,8 +1625,29 @@ static int rockchip_display_probe(struct udevice *dev)
 	route_node = dev_read_subnode(dev, "route");
 	if (!ofnode_valid(route_node))
 		return -ENODEV;
-
+	#ifdef __HDMI__
+	int i=0;	
+	#endif
 	ofnode_for_each_subnode(node, route_node) {
+		#ifdef __HDMI__
+		//if(gpio_get_value(16)==0)
+		int hdmi_status=readl(0xfe0ac010) & 0x02 ? 1 : 0;
+		if(hdmi_status==1)
+		{
+			if(i==0)
+			{
+				continue;
+			}
+		}
+		else
+		{
+			if(i==3)
+			{
+				continue;
+			}
+		}
+		i++;		
+		#endif
 		if (!ofnode_is_available(node))
 			continue;
 		phandle = ofnode_read_u32_default(node, "connect", -1);
