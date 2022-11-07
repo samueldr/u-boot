@@ -2,7 +2,7 @@
 1: env:
 
 	1.1: prepare source code ,eg: ~/rk3566/
-	1.2: cp  rkbin file(for build image done)
+	1.2: cp  rkbin file(for build image done)---https://github.com/rockchip-linux/rkbin
 		mv rkbin  ~/rk3566/
 	1.3: SDDiskTool_v1.69.zip	 
 
