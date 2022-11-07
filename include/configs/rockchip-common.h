@@ -7,7 +7,7 @@
 #ifndef _ROCKCHIP_COMMON_H_
 #define _ROCKCHIP_COMMON_H_
 #include <linux/sizes.h>
-
+#define __ANBERNIC_BOOT__
 #define COUNTER_FREQUENCY               24000000
 
 #if CONFIG_IS_ENABLED(TINY_FRAMEWORK) && !defined(CONFIG_ARM64)
@@ -86,6 +86,14 @@
 #else
 #define ROOT_UUID "69DAD710-2CE4-4E3C-B16C-21A1D49ABED3;\0"
 #endif
+
+#ifdef __ANBERNIC_BOOT__
+#define PARTS_DEFAULT \
+	"uuid_disk=${uuid_gpt_disk};" \
+	"name=uboot,start=8MB,size=4MB,uuid=${uuid_gpt_loader2};" \
+	"name=resource,start=12MB,size=4MB,uuid=${uuid_gpt_resource};" \
+	"name=ANBERNIC,start=16MB,size=3072M,bootable,uuid=${uuid_gpt_boot};\0"
+#else
 #define PARTS_DEFAULT \
 	"uuid_disk=${uuid_gpt_disk};" \
 	"name=loader1,start=32K,size=4000K,uuid=${uuid_gpt_loader1};" \
@@ -93,6 +101,7 @@
 	"name=trust,size=4M,uuid=${uuid_gpt_atf};" \
 	"name=boot,size=112M,bootable,uuid=${uuid_gpt_boot};" \
 	"name=rootfs,size=-,uuid="ROOT_UUID
+#endif
 
 #define PARTS_RKIMG \
 	"uuid_disk=${uuid_gpt_disk};" \

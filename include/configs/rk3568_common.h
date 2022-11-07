@@ -81,7 +81,20 @@
 	"ramdisk_addr_r=0x0a200000\0"
 
 #include <config_distro_bootcmd.h>
+#ifdef __ANBERNIC_BOOT__
+#define CONFIG_EXTRA_ENV_SETTINGS \
+	ENV_MEM_LAYOUT_SETTINGS \
+	"partitions=" PARTS_DEFAULT \
+	ROCKCHIP_DEVICE_SETTINGS \
+	RKIMG_DET_BOOTDEV \
+	BOOTENV
 
+#undef RKIMG_BOOTCOMMAND
+#define RKIMG_BOOTCOMMAND		\
+	"boot_fit;"			\
+	"boot_android ${devtype} ${devnum};" \
+	"setenv distro_bootpart 3&&run distro_bootcmd;"
+#else
 #define CONFIG_EXTRA_ENV_SETTINGS \
 	ENV_MEM_LAYOUT_SETTINGS \
 	"partitions=" PARTS_RKIMG \
@@ -94,6 +107,7 @@
 	"boot_fit;"			\
 	"boot_android ${devtype} ${devnum};" \
 	"run distro_bootcmd;"
+#endif
 #endif
 
 /* rockchip ohci host driver */
