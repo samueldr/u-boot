@@ -693,7 +693,12 @@ function pack_images()
 		fi
 	fi
 }
-
+pack_idbloader()
+{
+	#tools/mkimage -n px30 -T rksd -d ${RKBIN}/bin/rk35/rk3566_ddr_1056MHz_v1.07.bin ./sd_boot/idbloader.img
+	#cat ${RKBIN}/bin/rk35/rk356x_spl_v1.11.bin >> ./sd_boot/idbloader.img
+	cat ./rk356x_spl_loader_v1.07.111.bin >> ./sd_boot/idbloader.img
+}
 function finish()
 {
 	echo
@@ -715,4 +720,5 @@ sub_commands
 clean_files
 make PYTHON=python2 CROSS_COMPILE=${TOOLCHAIN_GCC} all --jobs=${JOB}
 pack_images
+#pack_idbloader
 finish
