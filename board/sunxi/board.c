@@ -133,7 +133,6 @@ void i2c_init_board(void)
  */
 enum env_location env_get_location(enum env_operation op, int prio)
 {
-	return prio ? ENVL_UNKNOWN : ENVL_UBI;
 	if (prio > 1)
 		return ENVL_UNKNOWN;
 
