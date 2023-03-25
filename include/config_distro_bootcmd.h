@@ -305,6 +305,22 @@
 	BOOT_TARGET_DEVICES_references_DHCP_without_CONFIG_CMD_DHCP
 #endif
 
+#if CONFIG_IS_ENABLED(CMD_USB_MASS_STORAGE)
+#define BOOTENV_DEV_UMS(devtypeu, devtypel, instance) \
+	"bootcmd_ums=" /* Exposes drives via UMS in the order of least trivial to most trivial to use on a computer. */ \
+		"ums 0 mmc 0;"  /* eMMC */ \
+		"ums 0 nvme 0;" /* NVMe */ \
+		"ums 0 mmc 1;"  /* SD   */ \
+		"\0"
+#define BOOTENV_DEV_NAME_UMS(devtypeu, devtypel, instance) \
+	"ums "
+#else
+#define BOOTENV_DEV_UMS \
+	BOOT_TARGET_DEVICES_references_UMS_without_CONFIG_CMD_UMS
+#define BOOTENV_DEV_NAME_UMS \
+	BOOT_TARGET_DEVICES_references_UMS_without_CONFIG_CMD_UMS
+#endif
+
 #if defined(CONFIG_CMD_DHCP) && defined(CONFIG_CMD_PXE)
 #define BOOTENV_DEV_PXE(devtypeu, devtypel, instance) \
 	"bootcmd_pxe=" \
