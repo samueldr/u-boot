@@ -193,6 +193,7 @@
 	"boot_fit;"
 #else
 #define RKIMG_BOOTCOMMAND			\
+	"mmc list;" /* workaround for `mmc dev 1` not working when booting from SPI */ \
 	"run distro_bootcmd;"			\
 	"boot_android ${devtype} ${devnum};"	\
 	"boot_fit;"				\
