@@ -107,8 +107,8 @@
 #endif
 
 #define BOOT_TARGET_DEVICES(func) \
-	BOOT_TARGET_NVME(func) \
 	BOOT_TARGET_MMC(func) \
+	BOOT_TARGET_NVME(func) \
 	BOOT_TARGET_MTD(func) \
 	BOOT_TARGET_RKNAND(func) \
 	BOOT_TARGET_USB(func) \
