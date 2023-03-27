@@ -194,7 +194,7 @@ static int rockchip_set_serialno(void)
 							  &dev);
 
 		if (ret) {
-			printf("%s: could not find efuse/otp device\n", __func__);
+			//printf("%s: could not find efuse/otp device\n", __func__);
 			return ret;
 		}
 

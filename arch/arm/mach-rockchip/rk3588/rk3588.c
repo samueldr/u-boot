@@ -1164,7 +1164,7 @@ static int fdt_fixup_modules(void *blob)
 	ret = uclass_get_device_by_driver(UCLASS_MISC,
 					  DM_GET_DRIVER(rockchip_otp), &dev);
 	if (ret) {
-		printf("can't get otp device, ret=%d\n", ret);
+		//printf("can't get otp device, ret=%d\n", ret);
 		return ret;
 	}
 
