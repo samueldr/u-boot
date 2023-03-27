@@ -107,8 +107,8 @@
 #endif
 
 #define BOOT_TARGET_DEVICES(func) \
-	BOOT_TARGET_NVME(func) \
 	BOOT_TARGET_MMC(func) \
+	BOOT_TARGET_NVME(func) \
 	BOOT_TARGET_MTD(func) \
 	BOOT_TARGET_RKNAND(func) \
 	BOOT_TARGET_USB(func) \
@@ -186,10 +186,10 @@
 	"boot_fit;"
 #else
 #define RKIMG_BOOTCOMMAND			\
+	"run distro_bootcmd;"			\
 	"boot_android ${devtype} ${devnum};"	\
 	"boot_fit;"				\
-	"bootrkp;"				\
-	"run distro_bootcmd;"
+	"bootrkp;"
 #endif
 
 #endif /* CONFIG_SPL_BUILD */
