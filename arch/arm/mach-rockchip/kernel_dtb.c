@@ -353,7 +353,7 @@ dtb_embed:
 		       fdt_totalsize(gd->fdt_blob_kern));
 		printf("DTB: %s\n", CONFIG_EMBED_KERNEL_DTB_PATH);
 	} else {
-		printf("Failed to get kernel dtb, ret=%d\n", ret);
+		//printf("Failed to get kernel dtb, ret=%d\n", ret);
 		return -ENOENT;
 	}
 
