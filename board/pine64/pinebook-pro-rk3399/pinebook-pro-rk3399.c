@@ -53,6 +53,9 @@ void led_setup(void)
 	// Light up the red LED
 	// <&gpio0 RK_PA2 GPIO_ACTIVE_HIGH>;
 	spl_gpio_output(gpio0, GPIO(BANK_A, 2), 1);
+	// Turn off green LED (from kept reboot state)
+	// <&gpio0 RK_PB3 GPIO_ACTIVE_HIGH>;
+	spl_gpio_output(gpio0, GPIO(BANK_B, 3), 0);
 }
 
 #endif
