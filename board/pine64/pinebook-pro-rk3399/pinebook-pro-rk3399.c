@@ -58,6 +58,19 @@ void led_setup(void)
 	spl_gpio_output(gpio0, GPIO(BANK_B, 3), 0);
 }
 
+#define GPIO1_BASE	0xff730000
+
+void setup_gpio_pins(void)
+{
+	struct rockchip_gpio_regs * const gpio1 = (void *)GPIO1_BASE;
+
+	// Turns the display power supply off
+	// It is `always-on` in DT, but a `reboot` will not turn it off.
+	// When turned on at boot, the current implementation doesn't play well.
+	// <&gpio1 RK_PC6 GPIO_ACTIVE_HIGH>;
+	spl_gpio_output(gpio1, GPIO(BANK_C, 6), 0);
+}
+
 #endif
 
 #ifdef CONFIG_MISC_INIT_R
