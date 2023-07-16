@@ -305,6 +305,12 @@ int video_bmp_display(struct udevice *dev, ulong bmp_image, int x, int y,
 		video_splash_align_axis(&y, priv->ysize, height);
 	}
 
+	// Clamp image to axis end with INT_MAX
+	if (x == INT_MAX)
+		x = pwidth - width;
+	if (y == INT_MAX)
+		y = priv->ysize - height;
+
 	if ((x + width) > pwidth)
 		width = pwidth - x;
 	if ((y + height) > priv->ysize)
