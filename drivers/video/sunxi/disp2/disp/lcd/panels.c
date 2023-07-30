@@ -184,6 +184,9 @@ __lcd_panel_t* panel_array[] = {
 #ifdef CONFIG_LCD_SUPPORT_NT35510_MIPI
 	&nt35510_panel,
 #endif
+#ifdef CONFIG_LCD_SUPPORT_D310T9362V1_MIPI
+	&d310t9362v1_panel,
+#endif
 	/* add new panel below */
 
 	NULL,

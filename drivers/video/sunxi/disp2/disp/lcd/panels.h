@@ -289,4 +289,8 @@ extern __lcd_panel_t icn6202_panel;
 extern __lcd_panel_t nt35510_panel;
 #endif
 
+#ifdef CONFIG_LCD_SUPPORT_D310T9362V1_MIPI
+extern __lcd_panel_t d310t9362v1_panel;
+#endif
+
 #endif
