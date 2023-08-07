@@ -15,6 +15,6 @@
 
 extern __lcd_panel_t d310t9362v1_panel;
 
-extern s32 bsp_disp_get_panel_info(u32 screen_id, struct disp_panel_para *info);
+extern s32 bsp_disp_get_panel_info(u32 screen_id, disp_panel_para *info);
 
 #endif /*End of file*/
