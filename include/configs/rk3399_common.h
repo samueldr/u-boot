@@ -39,20 +39,26 @@
 	"fdt_addr_r=0x01f00000\0" \
 	"fdtoverlay_addr_r=0x02000000\0" \
 	"kernel_addr_r=0x02080000\0" \
-	"ramdisk_addr_r=0x06000000\0" \
-	"kernel_comp_addr_r=0x08000000\0" \
+	"ramdisk_addr_r=0x08000000\0" \
+	"kernel_comp_addr_r=0x0a000000\0" \
 	"kernel_comp_size=0x2000000\0"
 
 #ifndef ROCKCHIP_DEVICE_SETTINGS
 #define ROCKCHIP_DEVICE_SETTINGS
 #endif
 
+#include <config_distro_bootcmd.h>
+#include <environment/distro/sf.h>
 #define CFG_EXTRA_ENV_SETTINGS \
 	ENV_MEM_LAYOUT_SETTINGS \
 	"fdtfile=" CONFIG_DEFAULT_FDT_FILE "\0" \
 	"partitions=" PARTS_DEFAULT \
 	ROCKCHIP_DEVICE_SETTINGS \
-	"boot_targets=" BOOT_TARGETS "\0"
+	BOOTENV \
+	BOOTENV_SF \
+	"altbootcmd=" \
+		"setenv boot_syslinux_conf extlinux/extlinux-rollback.conf;" \
+		"run distro_bootcmd\0"
 
 #endif
 

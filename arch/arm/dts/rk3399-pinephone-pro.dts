@@ -11,6 +11,7 @@
 
 /dts-v1/;
 #include <dt-bindings/input/linux-event-codes.h>
+#include <dt-bindings/leds/common.h>
 #include "rk3399.dtsi"
 #include "rk3399-opp.dtsi"
 
@@ -29,6 +30,57 @@
 		stdout-path = "serial2:115200n8";
 	};
 
+	adc-keys {
+		compatible = "adc-keys";
+		io-channels = <&saradc 1>;
+		io-channel-names = "buttons";
+		keyup-threshold-microvolt = <1600000>;
+		poll-interval = <100>;
+
+		button-up {
+			label = "Volume Up";
+			linux,code = <KEY_VOLUMEUP>;
+			press-threshold-microvolt = <  1000>;
+		};
+
+		button-down {
+			label = "Volume Down";
+			linux,code = <KEY_VOLUMEDOWN>;
+			press-threshold-microvolt = <290000>;
+		};
+	};
+
+	cluster1_opp_ppp: opp-table1b {
+		compatible = "operating-points-v2";
+		opp-shared;
+
+		opp00 {
+			opp-hz = /bits/ 64 <408000000>;
+			opp-microvolt = <800000>;
+			clock-latency-ns = <40000>;
+		};
+		opp01 {
+			opp-hz = /bits/ 64 <600000000>;
+			opp-microvolt = <800000>;
+		};
+		opp02 {
+			opp-hz = /bits/ 64 <816000000>;
+			opp-microvolt = <825000>;
+		};
+		opp03 {
+			opp-hz = /bits/ 64 <1008000000>;
+			opp-microvolt = <875000>;
+		};
+		opp04 {
+			opp-hz = /bits/ 64 <1200000000>;
+			opp-microvolt = <950000>;
+		};
+		opp05 {
+			opp-hz = /bits/ 64 <1416000000>;
+			opp-microvolt = <1025000>;
+		};
+	};
+
 	gpio-keys {
 		compatible = "gpio-keys";
 		pinctrl-names = "default";
@@ -41,6 +93,36 @@
 			linux,code = <KEY_POWER>;
 			wakeup-source;
 		};
+	};
+
+	leds {
+		compatible = "gpio-leds";
+		pinctrl-names = "default";
+		pinctrl-0 = <&red_led_pin &green_led_pin &blue_led_pin>;
+
+		led-red {
+			color = <LED_COLOR_ID_RED>;
+			function = LED_FUNCTION_INDICATOR;
+			gpios = <&gpio4 RK_PD2 GPIO_ACTIVE_HIGH>;
+		};
+
+		led-green {
+			color = <LED_COLOR_ID_GREEN>;
+			function = LED_FUNCTION_INDICATOR;
+			gpios = <&gpio4 RK_PD5 GPIO_ACTIVE_HIGH>;
+		};
+
+		led-blue {
+			color = <LED_COLOR_ID_BLUE>;
+			function = LED_FUNCTION_INDICATOR;
+			gpios = <&gpio4 RK_PD6 GPIO_ACTIVE_HIGH>;
+		};
+	};
+
+	vibrator {
+		compatible = "gpio-vibrator";
+		enable-gpios = <&gpio3 RK_PB1 GPIO_ACTIVE_HIGH>;
+		vcc-supply = <&vcc3v3_sys>;
 	};
 
 	vcc_sys: vcc-sys-regulator {
@@ -122,10 +204,12 @@
 
 &cpu_b0 {
 	cpu-supply = <&vdd_cpu_b>;
+	operating-points-v2 = <&cluster1_opp_ppp>;
 };
 
 &cpu_b1 {
 	cpu-supply = <&vdd_cpu_b>;
+	operating-points-v2 = <&cluster1_opp_ppp>;
 };
 
 &emmc_phy {
@@ -367,6 +451,20 @@
 		};
 	};
 
+	leds {
+		red_led_pin: red-led-pin {
+			rockchip,pins = <4 RK_PD2 RK_FUNC_GPIO &pcfg_pull_none>;
+		};
+
+		green_led_pin: green-led-pin {
+			rockchip,pins = <4 RK_PD5 RK_FUNC_GPIO &pcfg_pull_none>;
+		};
+
+		blue_led_pin: blue-led-pin {
+			rockchip,pins = <4 RK_PD6 RK_FUNC_GPIO &pcfg_pull_none>;
+		};
+	};
+
 	pmic {
 		pmic_int_l: pmic-int-l {
 			rockchip,pins = <1 RK_PC5 RK_FUNC_GPIO &pcfg_pull_up>;
@@ -408,6 +506,11 @@
 	};
 };
 
+&saradc {
+	vref-supply = <&vcca1v8_s3>;
+	status = "okay";
+};
+
 &sdio0 {
 	bus-width = <4>;
 	cap-sd-highspeed;
@@ -440,6 +543,16 @@
 	mmc-hs200-1_8v;
 	non-removable;
 	status = "okay";
+};
+
+&spi1 {
+	status = "okay";
+
+	spiflash: flash@0 {
+		compatible = "jedec,spi-nor";
+		reg = <0>;
+		spi-max-frequency = <10000000>;
+	};
 };
 
 &tsadc {
