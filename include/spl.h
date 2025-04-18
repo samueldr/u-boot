@@ -429,7 +429,7 @@ static inline void spl_load_init(struct spl_load_info *load,
 /*
  * We need to know the position of U-Boot in memory so we can jump to it. We
  * allow any U-Boot binary to be used (u-boot.bin, u-boot-nodtb.bin,
- * u-boot.img), hence the '_any'. These is no checking here that the correct
+ * u-boot.img), hence the '_any'. There is no checking here that the correct
  * image is found. For example if u-boot.img is used we don't check that
  * spl_parse_image_header() can parse a valid header.
  *
@@ -936,9 +936,10 @@ void spl_board_init(void);
 bool spl_was_boot_source(void);
 
 /**
- * spl_dfu_cmd- run dfu command with chosen mmc device interface
- * @param usb_index - usb controller number
- * @param mmc_dev -  mmc device nubmer
+ * spl_dfu_cmd() - run dfu command with chosen mmc device interface
+ * @param dfu_alt_info	environment variable name for dfu_alt_info
+ * @param interface	interface, e.g. "mmc" or "nand"
+ * @param devstr	device number as string
  *
  * Return: 0 on success, otherwise error code
  */
