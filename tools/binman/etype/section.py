@@ -604,6 +604,16 @@ class Entry_section(Entry):
                         rest = name[len(root):]
                         if rest in ['', '-elf', '-img', '-nodtb']:
                             entry = entries[name]
+        # Still haven't found anything?
+        if not entry:
+            if entry_name == 'u-boot-any':
+                # The U-Boot proper entry may be named `fit`.
+                # So let's allow making `u-boot-any` refer to `fit`.
+                # This is fulfilling an assumption from `spl_ram.c`.
+                name = 'fit'
+                if name in entries:
+                    entry = entries[name]
+
         return entry, entry_name, prop_name
 
     def GetSymbolValue(self, sym_name, optional, msg, base_addr, entries=None):
