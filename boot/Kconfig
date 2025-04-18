@@ -248,8 +248,8 @@ config SPL_LOAD_FIT_ADDRESS
 	default 0x44000000 if ARCH_IMX8M
 	default 0x0
 	help
-	  Specify the load address of the fit image that will be loaded
-	  by SPL.
+	  Specify the load address of the fit image that will be tried to be
+	  used by SPL, or loaded by the SPL.
 
 config SPL_LOAD_FIT_APPLY_OVERLAY
 	bool "Enable SPL applying DT overlays from FIT"
