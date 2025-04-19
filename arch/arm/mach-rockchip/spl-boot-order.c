@@ -132,24 +132,29 @@ void board_boot_order(u32 *spl_boot_list)
 				continue;
 		}
 
-		/* First check if the list element is an alias */
-		alias = fdt_get_alias(blob, conf);
-		if (alias)
-			conf = alias;
+		if (strncmp(conf, "maskrom", 7) == 0) {
+			/* BOOT_DEVICE_RAM does not use a DT node. */
+			boot_device = BOOT_DEVICE_RAM;
+		} else {
+			/* First check if the list element is an alias */
+			alias = fdt_get_alias(blob, conf);
+			if (alias)
+				conf = alias;
 
-		/* Try to resolve the config item (or alias) as a path */
-		node = fdt_path_offset(blob, conf);
-		if (node < 0) {
-			debug("%s: could not find %s in FDT\n", __func__, conf);
-			continue;
-		}
+			/* Try to resolve the config item (or alias) as a path */
+			node = fdt_path_offset(blob, conf);
+			if (node < 0) {
+				debug("%s: could not find %s in FDT\n", __func__, conf);
+				continue;
+			}
 
-		/* Try to map this back onto SPL boot devices */
-		boot_device = spl_node_to_boot_device(node);
-		if (boot_device < 0) {
-			debug("%s: could not map node %s to a boot-device\n",
-			      __func__, conf);
-			continue;
+			/* Try to map this back onto SPL boot devices */
+			boot_device = spl_node_to_boot_device(node);
+			if (boot_device < 0) {
+				debug("%s: could not map node %s to a boot-device\n",
+					  __func__, conf);
+				continue;
+			}
 		}
 
 		spl_boot_list[idx++] = boot_device;

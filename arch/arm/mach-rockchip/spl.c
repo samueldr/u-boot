@@ -45,6 +45,10 @@ const char *board_spl_was_booted_from(void)
 	if (bootdevice_brom_id < ARRAY_SIZE(boot_devices))
 		bootdevice_ofpath = boot_devices[bootdevice_brom_id];
 
+	/* Use this fallback value to signal maskrom-based boot mode */
+	if (!bootdevice_ofpath && bootdevice_brom_id == BROM_BOOTSOURCE_USB)
+		bootdevice_ofpath = "maskrom";
+
 	if (bootdevice_ofpath) {
 		brom_bootsource_id_cache = bootdevice_brom_id;
 		debug("%s: brom_bootdevice_id %x maps to '%s'\n",
