@@ -246,7 +246,7 @@ DFU
 
     * CONFIG_DFU=y
 
-    * CONFIG_SPL_RAM_SUPPORT=y or CONFIG TPL_RAM_SUPPORT=y
+    * CONFIG_SPL_RAM_SUPPORT=y or CONFIG_TPL_RAM_SUPPORT=y
 
 Ethernet
     This method loads an image over Ethernet. The BOOTP protocol is used to find
