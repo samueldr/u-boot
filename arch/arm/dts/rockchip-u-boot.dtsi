@@ -13,6 +13,7 @@
 
 #ifdef CONFIG_SPL
 &binman {
+	/* Combination of TPL, SPL and U-Boot proper for use on eMMC, or SD cards. */
 	simple-bin {
 		filename = "u-boot-rockchip.bin";
 		pad-byte = <0xff>;
@@ -205,5 +206,56 @@
 		};
 	};
 #endif /* CONFIG_ROCKCHIP_SPI_IMAGE */
+
+#ifdef CONFIG_SPL_RAM_DEVICE
+	/*
+	 * Binary to be sent as 0x472 payload with `rockusb download-boot` or `rkdeveloptool db`.
+	 * This cannot be ran when proper rockusb is running on the device (i.e. in most cases
+	 * when a maskrom button is involved.)
+	 */
+	u-boot-rockchip-maskrom-bin {
+		filename = "u-boot-rockchip-maskrom.bin";
+		pad-byte = <0xff>;
+
+		/* For now, the TPL is handled separately, as it needs to be sent prior to this binary. */
+		/* Additionaly, `boot_merger` from Rockchip is assumed to be used to produce the final binary. */
+
+		/* SPL output */
+		u-boot-spl {
+		};
+		/* Reference to the actual U-Boot proper image, for spl-ram. */
+#if defined(CONFIG_SPL_FIT) && (defined(CONFIG_ARM64) || defined(CONFIG_SPL_OPTEE_IMAGE))
+		fit {
+			type = "blob";
+			filename = "u-boot.itb";
+#else
+		u-boot-img {
+#endif
+			/*
+			 * The CONFIG_SPL_TEXT_BASE for SPL is 0x0.
+			 * We can presume CONFIG_SPL_MAX_SIZE is safe to start from...
+			 *
+			 * On at least RK3588, atf-1 will be loaded at CONFIG_SPL_MAX_SIZE.
+			 * Since this maskrom-bin is loaded at CONFIG_SPL_TEXT_BASE (0x0), will
+			 * be clobbered when loading the contents of this FIT image.
+			 * Thus, we're putting a *good enough* value this offset.
+			 * Ideally, we would (aligned?) use SPL_TEXT_BASE + SPL_MAX_SIZE + BL31_MAX_SIZE.
+			 * That is, if BL31 is always loaded at SPL_MAX_SIZE...
+			 *
+			 * The best outcome would be to have a way to make binman aware of overlaps
+			 * between two unrelated images.
+			 * For example, map `maskrom-bin` and the FIT image load *destinations* in
+			 * the address space when building `maskrom-bin`, ensuring none of the parts
+			 * from `maskrom-bin` overlap with the destinations from the FIT image.
+			 */
+			#define BL31_MAX_SIZE 0x40000
+			offset = <(CONFIG_SPL_TEXT_BASE + CONFIG_SPL_MAX_SIZE + BL31_MAX_SIZE)>;
+			/*
+			 * Using CONFIG_SPL_PAD_TO works, but produces huge images. (9.2MB vs. 1.8MB)
+			 */
+			/* offset = <CONFIG_SPL_PAD_TO>; */
+		};
+	};
+#endif /* CONFIG_SPL_RAM_DEVICE */
 };
 #endif /* CONFIG_SPL */
