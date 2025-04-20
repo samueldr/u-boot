@@ -79,6 +79,7 @@ in
     radxa-rock5b-maskrom-uploadable =
       pkgs.callPackage (
         { runCommand
+        , rockchiprs
         , rkbin
         , u-boot
         }:
@@ -128,12 +129,24 @@ in
 
         (PS4=" $ "; set -x
         cat "$iniPath" > config.ini
+        bin="$(grep '^PATH=' "config.ini" | cut -d'=' -f2)"
+
+        # Merge the binary
         tools/boot_merger "config.ini"
+
+        # Strip the timestamp
+        # boot_merger is a static binary, libfaketime won't work.
+        dd if=/dev/zero of="$bin" bs=1 seek="$((0x0E))" count=7 conv=notrunc
+        # Fix the CRC
+        "${rockchiprs}/bin/rockfile" update-crc "$bin"
+
+        # Install
         mkdir -p "$out"
         mv -t "$out" *.bin
         )
         ''
       ) {
+        inherit rockchiprs;
         u-boot = radxa-rock5b;
       }
     ;
