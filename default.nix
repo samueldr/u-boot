@@ -18,7 +18,15 @@ let
     attr:
     (platFor attr).${attr}
     .overrideAttrs (oldAttrs: {
-      src = builtins.fetchGit ./.;
+      src =
+        # Strip this file from the source.
+        # We want this file in the repository, sadly this doesn't work well with builtins.fetchGit.
+        builtins.path {
+          name = "source";
+          path = (builtins.fetchGit ./.);
+          filter = path: type: baseNameOf path != "default.nix";
+        }
+      ;
       postInstall = (oldAttrs.postInstall or "") + ''
         cp -v .config $out/config
       '';
