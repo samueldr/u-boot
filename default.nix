@@ -34,6 +34,29 @@ let
   ;
 in
   rec {
+    rockchiprs =
+      pkgs.callPackage (
+
+        { rustPlatform
+        , fetchFromGitHub
+        }:
+        rustPlatform.buildRustPackage {
+          pname = "rockchiprs";
+          version = "0-unstable-2025-04-19";
+          src = fetchFromGitHub {
+            owner = "samueldr";
+            repo = "rockchiprs";
+            rev = "c07ee79b6597a40f80e71da965a1731be0149a70";
+            hash = "sha256-MLBD8FzX+WaaxBj1eWxD+H+OGgiSFuE5I979OX87TYE=";
+          };
+          cargoHash = "sha256-85hBJPUwDORBrbxr9i11MHa3wGsSIgjl83hANl1etGk";
+          buildFeatures = [
+            "libusb"
+          ];
+        }
+      ) {}
+    ;
+
     radxa-rock5b =
     (u-boot-for "ubootRock5ModelB").overrideAttrs (oldAttrs: {
       version = "master@2025-04-18";
