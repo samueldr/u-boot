@@ -60,6 +60,10 @@ in
     radxa-rock5b =
     (u-boot-for "ubootRock5ModelB").overrideAttrs (oldAttrs: {
       version = "master@2025-04-18";
+      extraConfig = ''
+        CONFIG_SPL_RAM_DEVICE=y
+        CONFIG_SPL_RAM_SUPPORT=y
+      '';
       postInstall = (oldAttrs.postInstall or "") + ''
         FILES=(
           ".config"
