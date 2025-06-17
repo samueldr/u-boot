@@ -167,5 +167,18 @@ in
       u-boot = radxa-rock5b;
     };
 
+    # NOTE: still borrow's Nixpkgs' ubootRock5ModelB as a starting point.
+    generic-rk3588 = (make-rk3588-u-boot "ubootRock5ModelB" {}).override {
+      defconfig = "generic-rk3588_defconfig";
+      filesToInstall = [
+        "u-boot.itb"
+        "idbloader.img"
+        "u-boot-rockchip.bin"
+      ];
+    };
+    generic-rk3588-maskrom-uploadable = make-maskrom-uploadable {
+      u-boot = generic-rk3588;
+    };
+
     inherit pkgs;
   }
