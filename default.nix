@@ -18,6 +18,7 @@ let
     attr:
     (platFor attr).${attr}
     .overrideAttrs (oldAttrs: {
+      version = "master@2025-04-18";
       src =
         # Strip this file from the source.
         # We want this file in the repository, sadly this doesn't work well with builtins.fetchGit.
