@@ -176,6 +176,9 @@ in
         "u-boot-rockchip.bin"
       ];
     };
+    # ```
+    #  $ $(nix-build --no-out-link --attr rockchiprs)/bin/rockusb download-boot $(nix-build --no-out-link --attr generic-rk3588-maskrom-uploadable)/*.bin
+    # ```
     generic-rk3588-maskrom-uploadable = make-maskrom-uploadable {
       u-boot = generic-rk3588;
     };
