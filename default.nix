@@ -48,7 +48,6 @@ let
       '';
       postInstall = (oldAttrs.postInstall or "") + ''
         FILES=(
-          ".config"
           "spl/u-boot-spl.bin"
           "u-boot-rockchip-maskrom.bin"
         )
