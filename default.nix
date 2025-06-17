@@ -1,4 +1,10 @@
-{ pkgs ? (import <nixpkgs> {}) }:
+{ pkgs ? (import pkgsPath {})
+, pkgsPath ?
+  builtins.fetchTarball {
+    url = "https://github.com/NixOS/nixpkgs/archive/ee930f9755f58096ac6e8ca94a1887e0534e2d81.tar.gz";
+    sha256 = "sha256:15zn3jbphw6fwv0x7w9i4nqz3yvi8zpjy21d5jd5nvcpsvi4l7ra";
+  }
+}:
 
 let
   escape = builtins.toJSON;
