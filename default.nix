@@ -157,4 +157,6 @@ in
         u-boot = radxa-rock5b;
       }
     ;
+
+    inherit pkgs;
   }
