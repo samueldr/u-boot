@@ -33,6 +33,23 @@ let
       '';
     })
   ;
+  make-rk3588-u-boot =
+    attr: cfg:
+    (u-boot-for attr).overrideAttrs (oldAttrs: {
+      extraConfig = ''
+        CONFIG_SPL_RAM_DEVICE=y
+        CONFIG_SPL_RAM_SUPPORT=y
+      '';
+      postInstall = (oldAttrs.postInstall or "") + ''
+        FILES=(
+          ".config"
+          "spl/u-boot-spl.bin"
+          "u-boot-rockchip-maskrom.bin"
+        )
+        cp -v -t $out/ "''${FILES[@]}"
+      '';
+    } // cfg)
+  ;
 in
   rec {
     rockchiprs =
@@ -58,23 +75,7 @@ in
       ) {}
     ;
 
-    radxa-rock5b =
-    (u-boot-for "ubootRock5ModelB").overrideAttrs (oldAttrs: {
-      version = "master@2025-04-18";
-      extraConfig = ''
-        CONFIG_SPL_RAM_DEVICE=y
-        CONFIG_SPL_RAM_SUPPORT=y
-      '';
-      postInstall = (oldAttrs.postInstall or "") + ''
-        FILES=(
-          ".config"
-          "spl/u-boot-spl.bin"
-          "u-boot-rockchip-maskrom.bin"
-        )
-        cp -v -t $out/ "''${FILES[@]}"
-      '';
-    })
-    ;
+    radxa-rock5b = make-rk3588-u-boot "ubootRock5ModelB" {};
 
     #
     # Can be used with either of rkdeveloptool or rockusb:
