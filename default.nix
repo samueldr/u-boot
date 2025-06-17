@@ -81,22 +81,21 @@ in
       ) {}
     ;
 
-    radxa-rock5b = make-rk3588-u-boot "ubootRock5ModelB" {};
-
     #
     # Can be used with either of rkdeveloptool or rockusb:
     #
     # $ rkdeveloptool db .../result/rk3588_combined_loader.bin
     # $ cargo run --features="libusb" --example rockusb download-boot .../result/rk3588_combined_loader.bin
     #
-    radxa-rock5b-maskrom-uploadable =
+    make-maskrom-uploadable =
+      { u-boot }:
       pkgs.callPackage (
         { runCommand
         , rockchiprs
         , rkbin
         , u-boot
         }:
-        runCommand "radxa-rock5b-maskrom-uploadable" {
+        runCommand "${u-boot.defconfig}-maskrom-uploadable" {
           src = rkbin.src;
           ini = ''
             [CHIP_NAME]
@@ -159,10 +158,14 @@ in
         )
         ''
       ) {
-        inherit rockchiprs;
-        u-boot = radxa-rock5b;
+        inherit rockchiprs u-boot;
       }
     ;
+
+    radxa-rock5b = make-rk3588-u-boot "ubootRock5ModelB" {};
+    radxa-rock5b-maskrom-uploadable = make-maskrom-uploadable {
+      u-boot = radxa-rock5b;
+    };
 
     inherit pkgs;
   }
