@@ -275,8 +275,8 @@ in
       u-boot = radxa-rock5b;
     };
 
-    # NOTE: still borrow's Nixpkgs' ubootRock5ModelB as a starting point.
-    generic-rk3568 = ((make-64bit-rockchip-u-boot "ubootRock5ModelB" {}).override {
+    # NOTE: still borrowing Nixpkgs' builds as a starting point.
+    generic-rk3568 = ((make-64bit-rockchip-u-boot "ubootQuartz64B" {}).override {
       defconfig = "generic-rk3568_defconfig";
       filesToInstall = [
         "u-boot.itb"
@@ -292,7 +292,7 @@ in
       u-boot = generic-rk3568;
     };
 
-    # NOTE: still borrow's Nixpkgs' ubootRock5ModelB as a starting point.
+    # NOTE: still borrowing Nixpkgs' builds as a starting point.
     generic-rk3588 = (make-64bit-rockchip-u-boot "ubootRock5ModelB" {}).override {
       defconfig = "generic-rk3588_defconfig";
       filesToInstall = [
@@ -322,39 +322,39 @@ in
     #  ];
     #};
 
-    generic-rv1126 =
-      let
-        drv =
-          pkgs.pkgsCross.armv7l-hf-multiplatform.buildUBoot {
-            #defconfig = "generic-rv1126_defconfig";
-            #defconfig = "sonoff-ihost-rv1126_defconfig";
-            defconfig = "neu2-io-rv1126_defconfig";
-            extraConfig = ''
-              CONFIG_SPL_RAM_DEVICE=y
-              CONFIG_SPL_RAM_SUPPORT=y
-            '';
-            extraMeta.platforms = [ "armv7l-linux" ];
-            filesToInstall = [
-              #"u-boot.itb"
-              "idbloader.img"
-              "u-boot-rockchip.bin"
-              "spl/u-boot-spl.bin"
-              #"tpl/u-boot-tpl.bin"
-              "u-boot-rockchip-maskrom.bin"
-            ];
-            # XXX probably broken?
-            # But where would I get the TEE?
-            TEE="/dev/null";
-            #TEE=/Users/samuel/SBCs/rockchip/rkbin/bin/rv11/rv1126_tee_ta_v2.16.bin;
-            ROCKCHIP_TPL=/Users/samuel/SBCs/rockchip/rkbin/bin/rv11/rv1126_ddr_924MHz_v1.14.bin;
-          }
-        ;
-      in
-      u-boot-for drv
-    ;
-    generic-rv1126-maskrom-uploadable = make-maskrom-uploadable {
-      u-boot = generic-rv1126;
-    };
+    #generic-rv1126 =
+    #  let
+    #    drv =
+    #      pkgs.pkgsCross.armv7l-hf-multiplatform.buildUBoot {
+    #        #defconfig = "generic-rv1126_defconfig";
+    #        #defconfig = "sonoff-ihost-rv1126_defconfig";
+    #        defconfig = "neu2-io-rv1126_defconfig";
+    #        extraConfig = ''
+    #          CONFIG_SPL_RAM_DEVICE=y
+    #          CONFIG_SPL_RAM_SUPPORT=y
+    #        '';
+    #        extraMeta.platforms = [ "armv7l-linux" ];
+    #        filesToInstall = [
+    #          #"u-boot.itb"
+    #          "idbloader.img"
+    #          "u-boot-rockchip.bin"
+    #          "spl/u-boot-spl.bin"
+    #          #"tpl/u-boot-tpl.bin"
+    #          "u-boot-rockchip-maskrom.bin"
+    #        ];
+    #        # XXX probably broken?
+    #        # But where would I get the TEE?
+    #        TEE="/dev/null";
+    #        #TEE=/Users/samuel/SBCs/rockchip/rkbin/bin/rv11/rv1126_tee_ta_v2.16.bin;
+    #        ROCKCHIP_TPL=/Users/samuel/SBCs/rockchip/rkbin/bin/rv11/rv1126_ddr_924MHz_v1.14.bin;
+    #      }
+    #    ;
+    #  in
+    #  u-boot-for drv
+    #;
+    #generic-rv1126-maskrom-uploadable = make-maskrom-uploadable {
+    #  u-boot = generic-rv1126;
+    #};
 
     #sonoff-ihost-rv1126 =
     #  let
