@@ -276,15 +276,15 @@ in
     };
 
     # NOTE: still borrowing Nixpkgs' builds as a starting point.
-    generic-rk3568 = ((make-64bit-rockchip-u-boot "ubootQuartz64B" {}).override {
+    generic-rk3568 = ((make-64bit-rockchip-u-boot "ubootRock5ModelB" {}).override {
       defconfig = "generic-rk3568_defconfig";
       filesToInstall = [
         "u-boot.itb"
         "idbloader.img"
         "u-boot-rockchip.bin"
       ];
-    }).overrideAttrs(_: {
       ROCKCHIP_TPL = pkgs.rkbin.TPL_RK3566;
+      BL31 = "${plats.aarch64-linux.armTrustedFirmwareRK3568}/bl31.elf";
     });
     #  $ $(nix-build --no-out-link --attr rockchiprs)/bin/rockusb download-boot $(nix-build --no-out-link --attr generic-rk3568-maskrom-uploadable)/*.bin
     # ```
